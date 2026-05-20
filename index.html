@@ -336,11 +336,13 @@
     .badge-soon      { background: #dbeafe; color: #2563eb; }
     .badge-normal    { background: #f3f4f6; color: #6b7280; }
 
-    .delete-btn {
+    .item-actions { display: flex; gap: 2px; flex-shrink: 0; }
+
+    .icon-btn {
       background: none;
       border: none;
       color: #d1d5db;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       cursor: pointer;
       padding: 4px 6px;
       border-radius: 8px;
@@ -350,9 +352,58 @@
       align-items: center;
       justify-content: center;
       transition: color 0.15s, background 0.15s;
-      flex-shrink: 0;
     }
-    .delete-btn:active { color: #ef4444; background: #fee2e2; }
+    .icon-btn.edit-btn:active  { color: #6366f1; background: #eef2ff; }
+    .icon-btn.delete-btn:active { color: #ef4444; background: #fee2e2; }
+
+    /* 인라인 편집 모드 */
+    .todo-item.editing .todo-body { display: none; }
+    .edit-form {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .todo-item.editing .edit-form { display: flex; }
+    .edit-input {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1.5px solid #818cf8;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: #1a1a2e;
+      outline: none;
+    }
+    .edit-due {
+      padding: 5px 10px;
+      border: 1.5px solid #c7d2fe;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #374151;
+      outline: none;
+    }
+    .edit-actions { display: flex; gap: 6px; }
+    .edit-save {
+      padding: 5px 14px;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .edit-cancel {
+      padding: 5px 10px;
+      background: none;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #6b7280;
+      cursor: pointer;
+    }
+
+    .delete-btn { display: none; } /* 하위 호환 — icon-btn으로 대체 */
 
     .empty {
       text-align: center;
@@ -502,6 +553,32 @@
     render();
   }
 
+  function startEdit(id) {
+    const item = document.querySelector(`[data-id="${id}"]`);
+    if (!item) return;
+    item.classList.add('editing');
+    const input = item.querySelector('.edit-input');
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+  }
+
+  function commitEdit(id) {
+    const item = document.querySelector(`[data-id="${id}"]`);
+    if (!item) return;
+    const text = item.querySelector('.edit-input').value.trim();
+    const due  = item.querySelector('.edit-due').value || null;
+    if (!text) return;
+    const t = todos.find(t => t.id === id);
+    if (t) { t.text = text; t.dueDate = due; }
+    scheduleSave();
+    render();
+  }
+
+  function cancelEdit(id) {
+    const item = document.querySelector(`[data-id="${id}"]`);
+    if (item) item.classList.remove('editing');
+  }
+
   /* 날짜 관련 유틸 */
   function today() {
     return new Date().toISOString().slice(0, 10);
@@ -555,7 +632,18 @@
             <div class="todo-text">${escapeHtml(t.text)}</div>
             ${dueBadgeHtml(t.dueDate, t.done)}
           </div>
-          <button class="delete-btn" data-action="delete" title="삭제">🗑</button>
+          <div class="edit-form">
+            <input class="edit-input" value="${escapeHtml(t.text)}" maxlength="200" />
+            <input class="edit-due" type="date" value="${t.dueDate || ''}" />
+            <div class="edit-actions">
+              <button class="edit-save" data-action="save">저장</button>
+              <button class="edit-cancel" data-action="cancel">취소</button>
+            </div>
+          </div>
+          <div class="item-actions">
+            <button class="icon-btn edit-btn" data-action="edit" title="수정">✏️</button>
+            <button class="icon-btn delete-btn" data-action="delete" title="삭제">🗑</button>
+          </div>
         </div>
       `).join('');
     }
@@ -588,8 +676,20 @@
     const item = e.target.closest('[data-id]');
     if (!item) return;
     const id = Number(item.dataset.id);
-    if (e.target.dataset.action === 'toggle') toggleTodo(id);
-    if (e.target.dataset.action === 'delete') deleteTodo(id);
+    const action = e.target.closest('[data-action]')?.dataset.action;
+    if (action === 'toggle') toggleTodo(id);
+    if (action === 'delete') deleteTodo(id);
+    if (action === 'edit')   startEdit(id);
+    if (action === 'save')   commitEdit(id);
+    if (action === 'cancel') cancelEdit(id);
+  });
+
+  document.getElementById('todoList').addEventListener('keydown', e => {
+    const item = e.target.closest('[data-id]');
+    if (!item || !item.classList.contains('editing')) return;
+    const id = Number(item.dataset.id);
+    if (e.key === 'Enter')  { e.preventDefault(); commitEdit(id); }
+    if (e.key === 'Escape') cancelEdit(id);
   });
 
   document.querySelector('.filters').addEventListener('click', e => {
