@@ -442,7 +442,11 @@
 </div>
 
 <script>
-  // API 키와 모델은 서버(api/analyze.js)에서 관리합니다
+  // 페이지 진입 시 인증 확인
+  (async () => {
+    const res = await fetch('/api/me');
+    if (res.status === 401) window.location.href = '/api/login';
+  })();
 
   const STORAGE_KEY = 'my-todos-v1';
   let todos  = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
