@@ -447,35 +447,58 @@
 <script>
   // 인증은 Edge Middleware(middleware.js)가 서버 단에서 처리
 
-  const STORAGE_KEY = 'my-todos-v1';
-  let todos  = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  let todos  = [];
   let filter = 'all';
   let selectedFile = null;
   let previewTodos = [];
+  let saveTimer = null;
 
-  /* ── 저장 / 렌더 ── */
-  function save() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  /* ── 서버 동기화 ── */
+  async function loadTodos() {
+    try {
+      const res = await fetch('/api/todos');
+      if (res.ok) {
+        todos = await res.json();
+        render();
+      }
+    } catch (e) {
+      console.error('할일 불러오기 실패', e);
+    }
+  }
+
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      try {
+        await fetch('/api/todos', {
+          method: 'PUT',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ todos }),
+        });
+      } catch (e) {
+        console.error('저장 실패', e);
+      }
+    }, 400);
   }
 
   function addTodo(text, dueDate = null) {
     text = text.trim();
     if (!text) return;
     todos.unshift({ id: Date.now(), text, done: false, dueDate: dueDate || null });
-    save();
+    scheduleSave();
     render();
   }
 
   function toggleTodo(id) {
     const t = todos.find(t => t.id === id);
     if (t) t.done = !t.done;
-    save();
+    scheduleSave();
     render();
   }
 
   function deleteTodo(id) {
     todos = todos.filter(t => t.id !== id);
-    save();
+    scheduleSave();
     render();
   }
 
@@ -716,8 +739,8 @@
     });
   }
 
-  /* ── 초기 렌더 ── */
-  render();
+  /* ── 초기 로드 ── */
+  loadTodos();
 </script>
 </body>
 </html>
