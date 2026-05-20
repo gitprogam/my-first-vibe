@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>할일 목록</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
+
+    .container { max-width: 480px; margin: 0 auto; }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    /* ── 수동 추가 ── */
+    .input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+
+    .input-row input {
+      flex: 1;
+      padding: 14px 16px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      outline: none;
+      color: #1a1a2e;
+    }
+    .input-row input:focus { box-shadow: 0 2px 8px rgba(99,102,241,0.25); }
+
+    .input-row button {
+      padding: 14px 20px;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      min-width: 52px;
+      transition: background 0.15s;
+    }
+    .input-row button:active { background: #4f46e5; }
+
+    /* 기한 입력 */
+    .due-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+    .due-row input[type="date"] {
+      flex: 1;
+      padding: 10px 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      color: #374151;
+      outline: none;
+    }
+
+    /* ── AI 패널 ── */
+    .ai-card {
+      background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%);
+      border: 1.5px solid #c7d2fe;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .ai-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .ai-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      color: #4f46e5;
+      font-size: 0.95rem;
+    }
+
+    .ai-toggle-icon {
+      transition: transform 0.2s;
+      color: #818cf8;
+      font-size: 0.85rem;
+    }
+    .ai-card.open .ai-toggle-icon { transform: rotate(180deg); }
+
+    .ai-body {
+      display: none;
+      padding: 0 16px 16px;
+      border-top: 1px solid #c7d2fe;
+    }
+    .ai-card.open .ai-body { display: block; }
+
+    .ai-textarea {
+      width: 100%;
+      min-height: 110px;
+      padding: 12px;
+      border: 1.5px solid #c7d2fe;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: #fff;
+      color: #1a1a2e;
+      resize: vertical;
+      outline: none;
+      margin-top: 12px;
+    }
+    .ai-textarea:focus { border-color: #818cf8; }
+
+    .file-drop {
+      margin-top: 10px;
+      border: 2px dashed #c7d2fe;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      font-size: 0.83rem;
+      color: #6b7280;
+      cursor: pointer;
+      background: #fff;
+      transition: border-color 0.15s, background 0.15s;
+      position: relative;
+    }
+    .file-drop.drag-over { border-color: #6366f1; background: #eef2ff; }
+    .file-drop input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .file-name {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #4f46e5;
+      word-break: break-all;
+    }
+
+    .ai-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+    .btn-analyze {
+      flex: 1;
+      padding: 12px;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-analyze:disabled { background: #a5b4fc; cursor: not-allowed; }
+    .btn-analyze:not(:disabled):active { background: #4f46e5; }
+
+    .btn-clear-ai {
+      padding: 12px 14px;
+      background: none;
+      border: 1.5px solid #c7d2fe;
+      border-radius: 10px;
+      color: #6b7280;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    /* AI 결과 미리보기 */
+    .ai-preview {
+      margin-top: 14px;
+      display: none;
+    }
+    .ai-preview.show { display: block; }
+
+    .preview-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 8px;
+    }
+
+    .preview-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 12px;
+      background: #fff;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      border: 1.5px solid #e5e7eb;
+    }
+    .preview-item input[type="checkbox"] {
+      width: 20px; height: 20px; min-width: 20px;
+      margin-top: 2px; cursor: pointer; accent-color: #6366f1;
+    }
+    .preview-item-body { flex: 1; }
+    .preview-item-text { font-size: 0.9rem; color: #1a1a2e; }
+    .preview-item-due {
+      font-size: 0.78rem;
+      color: #6b7280;
+      margin-top: 2px;
+    }
+
+    .btn-add-selected {
+      width: 100%;
+      padding: 11px;
+      margin-top: 8px;
+      background: #10b981;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-add-selected:active { background: #059669; }
+
+    .ai-error {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: #fee2e2;
+      color: #dc2626;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      display: none;
+    }
+    .ai-error.show { display: block; }
+
+    /* ── 필터 ── */
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      justify-content: center;
+    }
+    .filters button {
+      padding: 7px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 20px;
+      background: #fff;
+      font-size: 0.85rem;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filters button.active {
+      border-color: #6366f1;
+      color: #6366f1;
+      font-weight: 600;
+    }
+
+    /* ── 할일 아이템 ── */
+    .todo-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .todo-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      animation: slideIn 0.2s ease;
+    }
+    .todo-item.overdue { border-left: 3px solid #ef4444; }
+    .todo-item.due-today { border-left: 3px solid #f97316; }
+    .todo-item.due-soon { border-left: 3px solid #3b82f6; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .todo-check {
+      width: 24px; height: 24px; min-width: 24px;
+      appearance: none;
+      border: 2px solid #d1d5db;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s;
+      margin-top: 1px;
+    }
+    .todo-check:checked { background: #6366f1; border-color: #6366f1; }
+    .todo-check:checked::after {
+      content: '';
+      position: absolute;
+      left: 5px; top: 2px;
+      width: 8px; height: 13px;
+      border: 2.5px solid #fff;
+      border-top: none; border-left: none;
+      transform: rotate(45deg);
+    }
+
+    .todo-body { flex: 1; min-width: 0; }
+
+    .todo-text {
+      font-size: 1rem;
+      color: #1a1a2e;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+    .todo-item.done .todo-text {
+      text-decoration: line-through;
+      color: #9ca3af;
+    }
+
+    .due-badge {
+      display: inline-block;
+      margin-top: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .badge-overdue   { background: #fee2e2; color: #dc2626; }
+    .badge-today     { background: #ffedd5; color: #ea580c; }
+    .badge-tomorrow  { background: #fef9c3; color: #ca8a04; }
+    .badge-soon      { background: #dbeafe; color: #2563eb; }
+    .badge-normal    { background: #f3f4f6; color: #6b7280; }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #d1d5db;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 8px;
+      min-width: 36px;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+    .delete-btn:active { color: #ef4444; background: #fee2e2; }
+
+    .empty {
+      text-align: center;
+      color: #9ca3af;
+      padding: 48px 0;
+      font-size: 0.95rem;
+    }
+
+    .summary {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 0.82rem;
+      margin-top: 16px;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>✅ 할일 목록</h1>
+
+  <!-- 수동 추가 -->
+  <div class="input-row">
+    <input id="newTodo" type="text" placeholder="할일을 입력하세요" maxlength="200" />
+    <button id="addBtn" title="추가">＋</button>
+  </div>
+  <div class="due-row">
+    <span>기한</span>
+    <input type="date" id="newDue" />
+  </div>
+
+  <!-- AI 분석 패널 -->
+  <div class="ai-card" id="aiCard">
+    <div class="ai-header" id="aiHeader">
+      <div class="ai-header-left">
+        <span>✨</span>
+        <span>AI로 할일 자동 추출</span>
+      </div>
+      <span class="ai-toggle-icon">▼</span>
+    </div>
+    <div class="ai-body">
+      <textarea class="ai-textarea" id="aiText"
+        placeholder="과제 안내, 일정표, 공지 내용 등을 붙여넣으세요.&#10;예) '5월 23일까지 보고서 제출, 6월 1일 중간고사'"
+      ></textarea>
+
+      <div class="file-drop" id="fileDrop">
+        <input type="file" id="fileInput" accept=".txt,.md,.pdf,image/*" />
+        📎 파일 첨부 — .txt .md .pdf 또는 이미지
+        <div class="file-name" id="fileName"></div>
+      </div>
+
+      <div class="ai-actions">
+        <button class="btn-analyze" id="analyzeBtn">AI 분석하기</button>
+        <button class="btn-clear-ai" id="clearAiBtn">초기화</button>
+      </div>
+
+      <div class="ai-error" id="aiError"></div>
+
+      <div class="ai-preview" id="aiPreview">
+        <div class="preview-title">추출된 할일 — 추가할 항목을 선택하세요</div>
+        <div id="previewList"></div>
+        <button class="btn-add-selected" id="addSelectedBtn">선택한 항목 추가하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 필터 -->
+  <div class="filters">
+    <button data-filter="all" class="active">전체</button>
+    <button data-filter="active">진행 중</button>
+    <button data-filter="done">완료</button>
+  </div>
+
+  <div id="todoList" class="todo-list"></div>
+  <div id="summary" class="summary"></div>
+</div>
+
+<script>
+  // API 키와 모델은 서버(api/analyze.js)에서 관리합니다
+
+  const STORAGE_KEY = 'my-todos-v1';
+  let todos  = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  let filter = 'all';
+  let selectedFile = null;
+  let previewTodos = [];
+
+  /* ── 저장 / 렌더 ── */
+  function save() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  }
+
+  function addTodo(text, dueDate = null) {
+    text = text.trim();
+    if (!text) return;
+    todos.unshift({ id: Date.now(), text, done: false, dueDate: dueDate || null });
+    save();
+    render();
+  }
+
+  function toggleTodo(id) {
+    const t = todos.find(t => t.id === id);
+    if (t) t.done = !t.done;
+    save();
+    render();
+  }
+
+  function deleteTodo(id) {
+    todos = todos.filter(t => t.id !== id);
+    save();
+    render();
+  }
+
+  /* 날짜 관련 유틸 */
+  function today() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function daysFromToday(dateStr) {
+    if (!dateStr) return null;
+    const d = new Date(dateStr + 'T00:00:00');
+    const now = new Date(); now.setHours(0,0,0,0);
+    return Math.round((d - now) / 86400000);
+  }
+
+  function dueBadgeHtml(dueDate, done) {
+    if (!dueDate || done) return '';
+    const diff = daysFromToday(dueDate);
+    let cls, label;
+    if (diff < 0)       { cls = 'badge-overdue';  label = `D+${Math.abs(diff)} 초과`; }
+    else if (diff === 0){ cls = 'badge-today';     label = '오늘 마감'; }
+    else if (diff === 1){ cls = 'badge-tomorrow';  label = '내일 마감'; }
+    else if (diff <= 7) { cls = 'badge-soon';      label = `D-${diff}`; }
+    else                { cls = 'badge-normal';    label = `D-${diff}`; }
+    return `<span class="due-badge ${cls}">${label} · ${dueDate}</span>`;
+  }
+
+  function itemClass(todo) {
+    if (todo.done || !todo.dueDate) return '';
+    const diff = daysFromToday(todo.dueDate);
+    if (diff < 0)       return 'overdue';
+    if (diff === 0)     return 'due-today';
+    if (diff <= 3)      return 'due-soon';
+    return '';
+  }
+
+  function render() {
+    const list    = document.getElementById('todoList');
+    const summary = document.getElementById('summary');
+
+    const visible = todos.filter(t => {
+      if (filter === 'active') return !t.done;
+      if (filter === 'done')   return t.done;
+      return true;
+    });
+
+    if (visible.length === 0) {
+      list.innerHTML = '<div class="empty">할일이 없어요 🎉</div>';
+    } else {
+      list.innerHTML = visible.map(t => `
+        <div class="todo-item ${t.done ? 'done' : ''} ${itemClass(t)}" data-id="${t.id}">
+          <input type="checkbox" class="todo-check" ${t.done ? 'checked' : ''} data-action="toggle" />
+          <div class="todo-body">
+            <div class="todo-text">${escapeHtml(t.text)}</div>
+            ${dueBadgeHtml(t.dueDate, t.done)}
+          </div>
+          <button class="delete-btn" data-action="delete" title="삭제">🗑</button>
+        </div>
+      `).join('');
+    }
+
+    const doneCount = todos.filter(t => t.done).length;
+    summary.textContent = todos.length ? `전체 ${todos.length}개 · 완료 ${doneCount}개` : '';
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── 수동 추가 이벤트 ── */
+  document.getElementById('addBtn').addEventListener('click', () => {
+    const input = document.getElementById('newTodo');
+    const due   = document.getElementById('newDue').value || null;
+    addTodo(input.value, due);
+    input.value = '';
+    document.getElementById('newDue').value = '';
+    input.focus();
+  });
+
+  document.getElementById('newTodo').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('addBtn').click();
+  });
+
+  document.getElementById('todoList').addEventListener('click', e => {
+    const item = e.target.closest('[data-id]');
+    if (!item) return;
+    const id = Number(item.dataset.id);
+    if (e.target.dataset.action === 'toggle') toggleTodo(id);
+    if (e.target.dataset.action === 'delete') deleteTodo(id);
+  });
+
+  document.querySelector('.filters').addEventListener('click', e => {
+    if (!e.target.dataset.filter) return;
+    filter = e.target.dataset.filter;
+    document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    render();
+  });
+
+  /* ── AI 패널 토글 ── */
+  document.getElementById('aiHeader').addEventListener('click', () => {
+    document.getElementById('aiCard').classList.toggle('open');
+  });
+
+  /* ── 파일 업로드 ── */
+  const fileDrop  = document.getElementById('fileDrop');
+  const fileInput = document.getElementById('fileInput');
+  const fileName  = document.getElementById('fileName');
+
+  fileInput.addEventListener('change', () => {
+    selectedFile = fileInput.files[0] || null;
+    fileName.textContent = selectedFile ? selectedFile.name : '';
+  });
+
+  fileDrop.addEventListener('dragover', e => { e.preventDefault(); fileDrop.classList.add('drag-over'); });
+  fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('drag-over'));
+  fileDrop.addEventListener('drop', e => {
+    e.preventDefault();
+    fileDrop.classList.remove('drag-over');
+    selectedFile = e.dataTransfer.files[0] || null;
+    fileName.textContent = selectedFile ? selectedFile.name : '';
+  });
+
+  document.getElementById('clearAiBtn').addEventListener('click', () => {
+    document.getElementById('aiText').value = '';
+    fileInput.value = '';
+    selectedFile = null;
+    fileName.textContent = '';
+    document.getElementById('aiPreview').classList.remove('show');
+    document.getElementById('aiError').classList.remove('show');
+    previewTodos = [];
+  });
+
+  /* ── AI 분석 ── */
+  document.getElementById('analyzeBtn').addEventListener('click', async () => {
+    const btn     = document.getElementById('analyzeBtn');
+    const errBox  = document.getElementById('aiError');
+    const preview = document.getElementById('aiPreview');
+
+    errBox.classList.remove('show');
+    preview.classList.remove('show');
+
+    const text = document.getElementById('aiText').value.trim();
+    if (!text && !selectedFile) {
+      showError('텍스트를 입력하거나 파일을 첨부해주세요.');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>분석 중...';
+
+    try {
+      const result = await callClaude(text, selectedFile);
+      previewTodos = result.todos || [];
+      renderPreview(previewTodos);
+      if (previewTodos.length === 0) showError('할일 항목을 찾지 못했어요. 내용을 다시 확인해주세요.');
+    } catch (e) {
+      showError(e.message);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'AI 분석하기';
+    }
+  });
+
+  function showError(msg) {
+    const errBox = document.getElementById('aiError');
+    errBox.textContent = '⚠ ' + msg;
+    errBox.classList.add('show');
+  }
+
+  function renderPreview(items) {
+    const list = document.getElementById('previewList');
+    if (items.length === 0) { list.innerHTML = ''; return; }
+
+    list.innerHTML = items.map((item, i) => `
+      <div class="preview-item">
+        <input type="checkbox" data-i="${i}" checked />
+        <div class="preview-item-body">
+          <div class="preview-item-text">${escapeHtml(item.text)}</div>
+          ${item.dueDate ? `<div class="preview-item-due">📅 기한: ${item.dueDate}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('aiPreview').classList.add('show');
+  }
+
+  document.getElementById('addSelectedBtn').addEventListener('click', () => {
+    const checks = document.querySelectorAll('#previewList input[type="checkbox"]');
+    checks.forEach(cb => {
+      if (cb.checked) {
+        const item = previewTodos[Number(cb.dataset.i)];
+        addTodo(item.text, item.dueDate || null);
+      }
+    });
+    document.getElementById('aiPreview').classList.remove('show');
+    document.getElementById('aiCard').classList.remove('open');
+    previewTodos = [];
+  });
+
+  /* ── /api/analyze 호출 ── */
+  async function callClaude(text, file) {
+    let fileData = null;
+    let mimeType = null;
+
+    if (file) {
+      mimeType = file.type || 'application/octet-stream';
+      fileData = await readFileAsBase64(file);
+    }
+
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ text, fileData, mimeType }),
+    });
+
+    if (res.status === 401) {
+      window.location.href = '/api/login';
+      throw new Error('로그인이 필요합니다. 잠시 후 Google 로그인 페이지로 이동합니다.');
+    }
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `서버 오류 (${res.status})`);
+    }
+
+    return res.json();
+  }
+
+  function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload  = () => resolve(reader.result.split(',')[1]);
+      reader.onerror = () => reject(new Error('파일을 읽을 수 없어요.'));
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ── 초기 렌더 ── */
+  render();
+</script>
+</body>
+</html>
