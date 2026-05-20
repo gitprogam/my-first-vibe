@@ -40,11 +40,11 @@ function parseCookies(header) {
 }
 
 function sessionCookie(jwt) {
-  return `session=${jwt}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${SESSION_TTL}`;
+  return `session=${jwt}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=${SESSION_TTL}`;
 }
 
 function clearCookie() {
-  return 'session=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0';
+  return 'session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0';
 }
 
 module.exports = { signJWT, verifyJWT, parseCookies, sessionCookie, clearCookie, SESSION_TTL };
