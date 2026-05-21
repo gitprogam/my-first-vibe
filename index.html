@@ -677,24 +677,36 @@
         width: 100%;
       }
 
-      /* 입력 영역 */
-      .input-row { margin-bottom: 0; }
-      .input-row input {
-        border-radius: 14px 0 0 0;
+      /* 입력 영역 — 하나의 카드 */
+      .input-row {
+        gap: 0;
+        margin-bottom: 0;
+        background: #fff;
+        border: 1px solid #e0e0e0;
         border-bottom: none;
+        border-radius: 14px 14px 0 0;
+        overflow: hidden;
+      }
+      .input-row input {
+        border: none;
+        border-radius: 0;
+        background: transparent;
         padding: 16px 20px;
         font-size: 16px;
       }
+      .input-row input:focus { border-color: transparent; }
       .input-row button {
-        border-radius: 0 14px 0 0;
-        padding: 16px 26px;
-        font-size: 15px;
-        font-weight: 600;
+        border-radius: 0;
+        padding: 0 26px;
+        font-size: 22px;
+        font-weight: 300;
+        align-self: stretch;
+        border-left: 1px solid #e0e0e0;
       }
       .due-row {
         background: #fff;
         border: 1px solid #e0e0e0;
-        border-top: none;
+        border-top: 1px solid #ebebeb;
         border-radius: 0 0 14px 14px;
         padding: 10px 20px;
         margin-bottom: 24px;
