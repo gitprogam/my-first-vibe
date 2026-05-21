@@ -8,8 +8,13 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #f0f2f5;
+      font-family: 'SF Pro Text', system-ui, -apple-system, sans-serif;
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.47;
+      letter-spacing: -0.374px;
+      background: #f5f5f7;
+      color: #1d1d1f;
       min-height: 100vh;
       padding: 24px 16px 48px;
     }
@@ -17,9 +22,11 @@
     .container { max-width: 480px; margin: 0 auto; }
 
     h1 {
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: #1a1a2e;
+      font-family: 'SF Pro Display', system-ui, -apple-system, sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: #1d1d1f;
       margin-bottom: 20px;
       text-align: center;
     }
@@ -30,28 +37,29 @@
     .input-row input {
       flex: 1;
       padding: 14px 16px;
-      border: none;
+      border: 1px solid #e0e0e0;
       border-radius: 12px;
-      font-size: 1rem;
+      font-size: 17px;
+      font-family: inherit;
+      letter-spacing: -0.374px;
       background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       outline: none;
-      color: #1a1a2e;
+      color: #1d1d1f;
     }
-    .input-row input:focus { box-shadow: 0 2px 8px rgba(99,102,241,0.25); }
+    .input-row input:focus { border-color: #0066cc; }
 
     .input-row button {
       padding: 14px 20px;
-      background: #6366f1;
+      background: #0066cc;
       color: #fff;
       border: none;
-      border-radius: 12px;
+      border-radius: 9999px;
       font-size: 1.3rem;
       cursor: pointer;
       min-width: 52px;
-      transition: background 0.15s;
+      transition: transform 0.1s;
     }
-    .input-row button:active { background: #4f46e5; }
+    .input-row button:active { transform: scale(0.95); }
 
     /* 기한 입력 */
     .due-row {
@@ -59,26 +67,27 @@
       align-items: center;
       gap: 8px;
       margin-bottom: 20px;
-      font-size: 0.85rem;
-      color: #6b7280;
+      font-size: 15px;
+      color: #7a7a7a;
     }
     .due-row input[type="date"] {
       flex: 1;
       padding: 10px 12px;
-      border: none;
+      border: 1px solid #e0e0e0;
       border-radius: 10px;
-      font-size: 0.9rem;
+      font-size: 15px;
+      font-family: inherit;
       background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      color: #374151;
+      color: #1d1d1f;
       outline: none;
     }
+    .due-row input[type="date"]:focus { border-color: #0066cc; }
 
     /* ── AI 패널 ── */
     .ai-card {
-      background: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%);
-      border: 1.5px solid #c7d2fe;
-      border-radius: 16px;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 18px;
       margin-bottom: 20px;
       overflow: hidden;
     }
@@ -97,21 +106,22 @@
       align-items: center;
       gap: 8px;
       font-weight: 600;
-      color: #4f46e5;
-      font-size: 0.95rem;
+      color: #0066cc;
+      font-size: 15px;
+      letter-spacing: -0.24px;
     }
 
     .ai-toggle-icon {
       transition: transform 0.2s;
-      color: #818cf8;
-      font-size: 0.85rem;
+      color: #7a7a7a;
+      font-size: 13px;
     }
     .ai-card.open .ai-toggle-icon { transform: rotate(180deg); }
 
     .ai-body {
       display: none;
       padding: 0 16px 16px;
-      border-top: 1px solid #c7d2fe;
+      border-top: 1px solid #e0e0e0;
     }
     .ai-card.open .ai-body { display: block; }
 
@@ -119,39 +129,40 @@
       width: 100%;
       min-height: 110px;
       padding: 12px;
-      border: 1.5px solid #c7d2fe;
+      border: 1px solid #e0e0e0;
       border-radius: 10px;
-      font-size: 0.9rem;
+      font-size: 15px;
       font-family: inherit;
-      background: #fff;
-      color: #1a1a2e;
+      letter-spacing: -0.24px;
+      background: #f5f5f7;
+      color: #1d1d1f;
       resize: vertical;
       outline: none;
       margin-top: 12px;
     }
-    .ai-textarea:focus { border-color: #818cf8; }
+    .ai-textarea:focus { border-color: #0066cc; background: #fff; }
 
     .file-drop {
       margin-top: 10px;
-      border: 2px dashed #c7d2fe;
+      border: 1.5px dashed #e0e0e0;
       border-radius: 10px;
       padding: 14px;
       text-align: center;
-      font-size: 0.83rem;
-      color: #6b7280;
+      font-size: 13px;
+      color: #7a7a7a;
       cursor: pointer;
-      background: #fff;
+      background: #f5f5f7;
       transition: border-color 0.15s, background 0.15s;
       position: relative;
     }
-    .file-drop.drag-over { border-color: #6366f1; background: #eef2ff; }
+    .file-drop.drag-over { border-color: #0066cc; background: #e8f2ff; }
     .file-drop input[type="file"] {
       position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
     }
     .file-name {
       margin-top: 6px;
-      font-size: 0.8rem;
-      color: #4f46e5;
+      font-size: 13px;
+      color: #0066cc;
       word-break: break-all;
     }
 
@@ -160,27 +171,31 @@
     .btn-analyze {
       flex: 1;
       padding: 12px;
-      background: #6366f1;
+      background: #0066cc;
       color: #fff;
       border: none;
-      border-radius: 10px;
-      font-size: 0.95rem;
+      border-radius: 9999px;
+      font-size: 15px;
       font-weight: 600;
+      letter-spacing: -0.24px;
       cursor: pointer;
-      transition: background 0.15s;
+      transition: transform 0.1s;
     }
-    .btn-analyze:disabled { background: #a5b4fc; cursor: not-allowed; }
-    .btn-analyze:not(:disabled):active { background: #4f46e5; }
+    .btn-analyze:disabled { background: #7ab5e8; cursor: not-allowed; }
+    .btn-analyze:not(:disabled):active { transform: scale(0.95); }
 
     .btn-clear-ai {
-      padding: 12px 14px;
+      padding: 12px 16px;
       background: none;
-      border: 1.5px solid #c7d2fe;
-      border-radius: 10px;
-      color: #6b7280;
-      font-size: 0.85rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 9999px;
+      color: #7a7a7a;
+      font-size: 15px;
+      font-family: inherit;
       cursor: pointer;
+      transition: transform 0.1s;
     }
+    .btn-clear-ai:active { transform: scale(0.95); }
 
     /* AI 결과 미리보기 */
     .ai-preview {
@@ -190,10 +205,11 @@
     .ai-preview.show { display: block; }
 
     .preview-title {
-      font-size: 0.82rem;
+      font-size: 13px;
       font-weight: 600;
-      color: #4f46e5;
+      color: #0066cc;
       margin-bottom: 8px;
+      letter-spacing: -0.1px;
     }
 
     .preview-item {
@@ -201,44 +217,47 @@
       align-items: flex-start;
       gap: 10px;
       padding: 10px 12px;
-      background: #fff;
+      background: #f5f5f7;
       border-radius: 10px;
       margin-bottom: 6px;
-      border: 1.5px solid #e5e7eb;
+      border: 1px solid #e0e0e0;
     }
     .preview-item input[type="checkbox"] {
       width: 20px; height: 20px; min-width: 20px;
-      margin-top: 2px; cursor: pointer; accent-color: #6366f1;
+      margin-top: 2px; cursor: pointer; accent-color: #0066cc;
     }
     .preview-item-body { flex: 1; }
-    .preview-item-text { font-size: 0.9rem; color: #1a1a2e; }
+    .preview-item-text { font-size: 15px; color: #1d1d1f; }
     .preview-item-due {
-      font-size: 0.78rem;
-      color: #6b7280;
+      font-size: 13px;
+      color: #7a7a7a;
       margin-top: 2px;
     }
 
     .btn-add-selected {
       width: 100%;
-      padding: 11px;
+      padding: 12px;
       margin-top: 8px;
-      background: #10b981;
+      background: #0066cc;
       color: #fff;
       border: none;
-      border-radius: 10px;
-      font-size: 0.92rem;
+      border-radius: 9999px;
+      font-size: 15px;
       font-weight: 600;
+      letter-spacing: -0.24px;
       cursor: pointer;
+      transition: transform 0.1s;
     }
-    .btn-add-selected:active { background: #059669; }
+    .btn-add-selected:active { transform: scale(0.95); }
 
     .ai-error {
       margin-top: 10px;
       padding: 10px 12px;
-      background: #fee2e2;
-      color: #dc2626;
+      background: #fff0f0;
+      color: #cc0000;
       border-radius: 10px;
-      font-size: 0.85rem;
+      font-size: 13px;
+      border: 1px solid #ffd0d0;
       display: none;
     }
     .ai-error.show { display: block; }
@@ -251,20 +270,24 @@
       justify-content: center;
     }
     .filters button {
-      padding: 7px 16px;
-      border: 2px solid #e5e7eb;
-      border-radius: 20px;
+      padding: 7px 18px;
+      border: 1px solid #e0e0e0;
+      border-radius: 9999px;
       background: #fff;
-      font-size: 0.85rem;
-      color: #6b7280;
+      font-size: 15px;
+      font-family: inherit;
+      letter-spacing: -0.24px;
+      color: #7a7a7a;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: transform 0.1s;
     }
     .filters button.active {
-      border-color: #6366f1;
-      color: #6366f1;
+      border-color: #0066cc;
+      background: #e8f2ff;
+      color: #0066cc;
       font-weight: 600;
     }
+    .filters button:active { transform: scale(0.95); }
 
     /* ── 할일 아이템 ── */
     .todo-list { display: flex; flex-direction: column; gap: 10px; }
@@ -274,14 +297,14 @@
       align-items: flex-start;
       gap: 12px;
       background: #fff;
-      border-radius: 14px;
+      border-radius: 18px;
       padding: 14px 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border: 1px solid #e0e0e0;
       animation: slideIn 0.2s ease;
     }
-    .todo-item.overdue { border-left: 3px solid #ef4444; }
-    .todo-item.due-today { border-left: 3px solid #f97316; }
-    .todo-item.due-soon { border-left: 3px solid #3b82f6; }
+    .todo-item.overdue  { border-left: 3px solid #cc0000; }
+    .todo-item.due-today { border-left: 3px solid #e67000; }
+    .todo-item.due-soon  { border-left: 3px solid #0066cc; }
 
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(-8px); }
@@ -291,14 +314,14 @@
     .todo-check {
       width: 24px; height: 24px; min-width: 24px;
       appearance: none;
-      border: 2px solid #d1d5db;
+      border: 2px solid #e0e0e0;
       border-radius: 6px;
       cursor: pointer;
       position: relative;
       transition: all 0.15s;
       margin-top: 1px;
     }
-    .todo-check:checked { background: #6366f1; border-color: #6366f1; }
+    .todo-check:checked { background: #0066cc; border-color: #0066cc; }
     .todo-check:checked::after {
       content: '';
       position: absolute;
@@ -312,36 +335,37 @@
     .todo-body { flex: 1; min-width: 0; }
 
     .todo-text {
-      font-size: 1rem;
-      color: #1a1a2e;
+      font-size: 17px;
+      color: #1d1d1f;
       word-break: break-word;
-      line-height: 1.4;
+      line-height: 1.47;
+      letter-spacing: -0.374px;
     }
     .todo-item.done .todo-text {
       text-decoration: line-through;
-      color: #9ca3af;
+      color: #7a7a7a;
     }
 
     .due-badge {
       display: inline-block;
       margin-top: 4px;
-      font-size: 0.75rem;
+      font-size: 12px;
       font-weight: 600;
       padding: 2px 8px;
-      border-radius: 20px;
+      border-radius: 9999px;
     }
-    .badge-overdue   { background: #fee2e2; color: #dc2626; }
-    .badge-today     { background: #ffedd5; color: #ea580c; }
-    .badge-tomorrow  { background: #fef9c3; color: #ca8a04; }
-    .badge-soon      { background: #dbeafe; color: #2563eb; }
-    .badge-normal    { background: #f3f4f6; color: #6b7280; }
+    .badge-overdue  { background: #ffe0e0; color: #cc0000; }
+    .badge-today    { background: #fff0dd; color: #e67000; }
+    .badge-tomorrow { background: #fffacc; color: #b38600; }
+    .badge-soon     { background: #e0f0ff; color: #0066cc; }
+    .badge-normal   { background: #f5f5f7; color: #7a7a7a; }
 
     .item-actions { display: flex; gap: 2px; flex-shrink: 0; }
 
     .icon-btn {
       background: none;
       border: none;
-      color: #d1d5db;
+      color: #c8c8c8;
       font-size: 1.05rem;
       cursor: pointer;
       padding: 4px 6px;
@@ -351,10 +375,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: color 0.15s, background 0.15s;
+      transition: color 0.15s, background 0.15s, transform 0.1s;
     }
-    .icon-btn.edit-btn:active  { color: #6366f1; background: #eef2ff; }
-    .icon-btn.delete-btn:active { color: #ef4444; background: #fee2e2; }
+    .icon-btn.edit-btn:active   { color: #0066cc; background: #e8f2ff; transform: scale(0.95); }
+    .icon-btn.delete-btn:active { color: #cc0000; background: #ffe0e0; transform: scale(0.95); }
 
     /* 인라인 편집 모드 */
     .todo-item.editing .todo-body { display: none; }
@@ -368,53 +392,60 @@
     .edit-input {
       width: 100%;
       padding: 6px 10px;
-      border: 1.5px solid #818cf8;
+      border: 1.5px solid #0066cc;
       border-radius: 8px;
-      font-size: 0.95rem;
+      font-size: 15px;
       font-family: inherit;
-      color: #1a1a2e;
+      letter-spacing: -0.24px;
+      color: #1d1d1f;
       outline: none;
     }
     .edit-due {
       padding: 5px 10px;
-      border: 1.5px solid #c7d2fe;
+      border: 1px solid #e0e0e0;
       border-radius: 8px;
-      font-size: 0.85rem;
-      color: #374151;
+      font-size: 13px;
+      font-family: inherit;
+      color: #1d1d1f;
       outline: none;
     }
     .edit-actions { display: flex; gap: 6px; }
     .edit-save {
-      padding: 5px 14px;
-      background: #6366f1;
+      padding: 6px 16px;
+      background: #0066cc;
       color: #fff;
       border: none;
-      border-radius: 8px;
-      font-size: 0.85rem;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
+      transition: transform 0.1s;
     }
+    .edit-save:active { transform: scale(0.95); }
     .edit-cancel {
-      padding: 5px 10px;
+      padding: 6px 12px;
       background: none;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      color: #6b7280;
+      border: 1px solid #e0e0e0;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #7a7a7a;
       cursor: pointer;
+      transition: transform 0.1s;
     }
-
+    .edit-cancel:active { transform: scale(0.95); }
 
     .empty {
       text-align: center;
-      color: #9ca3af;
+      color: #7a7a7a;
       padding: 48px 0;
-      font-size: 0.95rem;
+      font-size: 17px;
     }
 
     .summary {
       text-align: center;
-      color: #9ca3af;
-      font-size: 0.82rem;
+      color: #7a7a7a;
+      font-size: 13px;
       margin-top: 16px;
     }
 
@@ -429,69 +460,287 @@
       margin-right: 6px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── 진행률 바 ── */
+    .progress-wrap { margin-bottom: 20px; }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #7a7a7a;
+      margin-bottom: 6px;
+    }
+    .progress-bar {
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #0066cc;
+      border-radius: 9999px;
+      transition: width 0.4s ease;
+    }
+
+    /* ── 섹션 헤더 ── */
+    .section-header {
+      font-size: 11px;
+      font-weight: 600;
+      color: #7a7a7a;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 16px 4px 8px;
+    }
+    .section-header:first-child { padding-top: 0; }
+
+    /* ── 빈 상태 ── */
+    .empty { text-align: center; padding: 52px 0; }
+    .empty-icon { font-size: 44px; margin-bottom: 14px; }
+    .empty-title { font-size: 17px; font-weight: 600; color: #1d1d1f; margin-bottom: 6px; letter-spacing: -0.374px; }
+    .empty-sub { font-size: 15px; color: #7a7a7a; }
+
+    /* ── 체크박스 팝 애니메이션 ── */
+    @keyframes checkPop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    .todo-check.popping { animation: checkPop 0.2s ease; }
+
+    /* ── 정렬 툴바 ── */
+    .list-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding: 0 2px;
+    }
+    .list-count {
+      font-size: 13px;
+      color: #b0b0b0;
+      letter-spacing: -0.1px;
+    }
+    /* iOS 세그먼트 컨트롤 */
+    #sortOptions {
+      display: flex;
+      background: #e8e8ed;
+      border-radius: 8px;
+      padding: 2px;
+      gap: 0;
+    }
+    .sort-btn {
+      padding: 5px 11px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: inherit;
+      color: #8e8e93;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: -0.1px;
+      white-space: nowrap;
+    }
+    .sort-btn.active {
+      background: #fff;
+      color: #1d1d1f;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 0 0 0.5px rgba(0,0,0,0.05);
+    }
+
+    /* ── 드래그 핸들 ── */
+    .drag-handle {
+      color: #ccc;
+      cursor: grab;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 1px;
+      opacity: 0;
+      transition: opacity 0.15s, color 0.15s;
+    }
+    .todo-item:hover .drag-handle { opacity: 1; }
+    .drag-handle:hover { color: #999; }
+    .drag-handle:active { cursor: grabbing; }
+    .todo-item.dragging {
+      opacity: 0.4;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    .todo-item.drag-over {
+      border-color: #0066cc;
+      box-shadow: 0 0 0 2px #cce0ff;
+    }
+
+    /* ── 레이아웃 (모바일 공통) ── */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+    }
+    .logout-link {
+      align-self: flex-end;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #7a7a7a;
+      text-decoration: none;
+      letter-spacing: -0.1px;
+    }
+
+    /* ── 데스크탑 레이아웃 ── */
+    @media (min-width: 720px) {
+      body {
+        padding: 0;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: none;
+        margin: 0;
+        display: grid;
+        grid-template-columns: 240px 1fr;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        background: #fff;
+        border-right: 1px solid #e0e0e0;
+        padding: 36px 20px 32px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
+      }
+
+      .sidebar h1 {
+        font-size: 24px;
+        text-align: left;
+        margin-bottom: 24px;
+        letter-spacing: -0.4px;
+      }
+
+      .sidebar .progress-wrap {
+        margin-bottom: 28px;
+      }
+
+      .sidebar .filters {
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 4px;
+      }
+
+      .sidebar .filters button {
+        text-align: left;
+        border-radius: 10px;
+        padding: 10px 14px;
+        width: 100%;
+      }
+
+      .logout-link {
+        margin-top: auto;
+        align-self: flex-start;
+        padding-top: 20px;
+        margin-bottom: 0;
+      }
+
+      .main-content {
+        padding: 40px 48px 60px;
+        max-width: 700px;
+        width: 100%;
+      }
+
+      /* 데스크탑: 입력 + 날짜 한 줄 */
+      .input-row { margin-bottom: 0; border-radius: 12px 12px 0 0; }
+      .due-row {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-top: none;
+        border-radius: 0 0 12px 12px;
+        padding: 10px 14px;
+        margin-bottom: 20px;
+      }
+      .input-row input { border-radius: 12px 0 0 0; border-bottom: none; }
+    }
   </style>
 </head>
 <body>
 <div class="container">
-  <div style="text-align:right;margin-bottom:8px;">
-    <a href="/api/logout" style="font-size:0.8rem;color:#9ca3af;text-decoration:none;">로그아웃</a>
-  </div>
-  <h1>✅ 할일 목록</h1>
 
-  <!-- 수동 추가 -->
-  <div class="input-row">
-    <input id="newTodo" type="text" placeholder="할일을 입력하세요" maxlength="200" />
-    <button id="addBtn" title="추가">＋</button>
-  </div>
-  <div class="due-row">
-    <span>기한</span>
-    <input type="date" id="newDue" />
-  </div>
-
-  <!-- AI 분석 패널 -->
-  <div class="ai-card" id="aiCard">
-    <div class="ai-header" id="aiHeader">
-      <div class="ai-header-left">
-        <span>✨</span>
-        <span>AI로 할일 자동 추출</span>
+  <!-- 사이드바 (데스크탑: 왼쪽 고정, 모바일: 상단 플로우) -->
+  <aside class="sidebar">
+    <a href="/api/logout" class="logout-link">로그아웃</a>
+    <h1>할일 목록</h1>
+    <div class="progress-wrap" id="progressWrap" style="display:none">
+      <div class="progress-label">
+        <span id="progressText"></span>
+        <span id="progressPct"></span>
       </div>
-      <span class="ai-toggle-icon">▼</span>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     </div>
-    <div class="ai-body">
-      <textarea class="ai-textarea" id="aiText"
-        placeholder="과제 안내, 일정표, 공지 내용 등을 붙여넣으세요.&#10;예) '5월 23일까지 보고서 제출, 6월 1일 중간고사'"
-      ></textarea>
+    <nav class="filters">
+      <button data-filter="all" class="active">전체</button>
+      <button data-filter="active">진행 중</button>
+      <button data-filter="done">완료</button>
+    </nav>
+  </aside>
 
-      <div class="file-drop" id="fileDrop">
-        <input type="file" id="fileInput" accept=".txt,.md,.pdf,image/*" />
-        📎 파일 첨부 — .txt .md .pdf 또는 이미지
-        <div class="file-name" id="fileName"></div>
+  <!-- 메인 콘텐츠 -->
+  <main class="main-content">
+    <!-- 수동 추가 -->
+    <div class="input-row">
+      <input id="newTodo" type="text" placeholder="할일을 입력하세요" maxlength="200" />
+      <button id="addBtn" title="추가">＋</button>
+    </div>
+    <div class="due-row">
+      <span>기한</span>
+      <input type="date" id="newDue" />
+    </div>
+
+    <!-- AI 분석 패널 -->
+    <div class="ai-card" id="aiCard">
+      <div class="ai-header" id="aiHeader">
+        <div class="ai-header-left">
+          <span>✨</span>
+          <span>AI로 할일 자동 추출</span>
+        </div>
+        <span class="ai-toggle-icon">▼</span>
       </div>
-
-      <div class="ai-actions">
-        <button class="btn-analyze" id="analyzeBtn">AI 분석하기</button>
-        <button class="btn-clear-ai" id="clearAiBtn">초기화</button>
-      </div>
-
-      <div class="ai-error" id="aiError"></div>
-
-      <div class="ai-preview" id="aiPreview">
-        <div class="preview-title">추출된 할일 — 추가할 항목을 선택하세요</div>
-        <div id="previewList"></div>
-        <button class="btn-add-selected" id="addSelectedBtn">선택한 항목 추가하기</button>
+      <div class="ai-body">
+        <textarea class="ai-textarea" id="aiText"
+          placeholder="과제 안내, 일정표, 공지 내용 등을 붙여넣으세요.&#10;예) '5월 23일까지 보고서 제출, 6월 1일 중간고사'"
+        ></textarea>
+        <div class="file-drop" id="fileDrop">
+          <input type="file" id="fileInput" accept=".txt,.md,.pdf,image/*" />
+          📎 파일 첨부 — .txt .md .pdf 또는 이미지
+          <div class="file-name" id="fileName"></div>
+        </div>
+        <div class="ai-actions">
+          <button class="btn-analyze" id="analyzeBtn">AI 분석하기</button>
+          <button class="btn-clear-ai" id="clearAiBtn">초기화</button>
+        </div>
+        <div class="ai-error" id="aiError"></div>
+        <div class="ai-preview" id="aiPreview">
+          <div class="preview-title">추출된 할일 — 추가할 항목을 선택하세요</div>
+          <div id="previewList"></div>
+          <button class="btn-add-selected" id="addSelectedBtn">선택한 항목 추가하기</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- 필터 -->
-  <div class="filters">
-    <button data-filter="all" class="active">전체</button>
-    <button data-filter="active">진행 중</button>
-    <button data-filter="done">완료</button>
-  </div>
+    <div class="list-toolbar">
+      <span class="list-count" id="listCount"></span>
+      <div id="sortOptions">
+        <button data-sort="manual" class="sort-btn active">기본</button>
+        <button data-sort="due" class="sort-btn">마감일</button>
+        <button data-sort="name" class="sort-btn">이름</button>
+        <button data-sort="created" class="sort-btn">최신</button>
+      </div>
+    </div>
 
-  <div id="todoList" class="todo-list"></div>
-  <div id="summary" class="summary"></div>
+    <div id="todoList" class="todo-list"></div>
+    <div id="summary" class="summary"></div>
+  </main>
+
 </div>
 
 <script>
@@ -501,7 +750,9 @@
   let filter = 'all';
   let selectedFile = null;
   let previewTodos = [];
+  let sortMode = 'manual';
   let saveTimer = null;
+  let dragSrcId = null;
 
   /* ── 서버 동기화 ── */
   async function loadTodos() {
@@ -611,44 +862,166 @@
     return '';
   }
 
-  function render() {
-    const list    = document.getElementById('todoList');
-    const summary = document.getElementById('summary');
+  function getSortedTodos(items) {
+    if (sortMode === 'due') {
+      return [...items].sort((a, b) => {
+        if (!a.dueDate && !b.dueDate) return 0;
+        if (!a.dueDate) return 1;
+        if (!b.dueDate) return -1;
+        return a.dueDate.localeCompare(b.dueDate);
+      });
+    }
+    if (sortMode === 'name') return [...items].sort((a, b) => a.text.localeCompare(b.text, 'ko'));
+    if (sortMode === 'created') return [...items].sort((a, b) => b.id - a.id);
+    return items;
+  }
 
-    const visible = todos.filter(t => {
-      if (filter === 'active') return !t.done;
-      if (filter === 'done')   return t.done;
-      return true;
-    });
-
-    if (visible.length === 0) {
-      list.innerHTML = '<div class="empty">할일이 없어요 🎉</div>';
-    } else {
-      list.innerHTML = visible.map(t => `
-        <div class="todo-item ${t.done ? 'done' : ''} ${itemClass(t)}" data-id="${t.id}">
-          <input type="checkbox" class="todo-check" ${t.done ? 'checked' : ''} data-action="toggle" />
-          <div class="todo-body">
-            <div class="todo-text">${escapeHtml(t.text)}</div>
-            ${dueBadgeHtml(t.dueDate, t.done)}
-          </div>
-          <div class="edit-form">
-            <input class="edit-input" value="${escapeHtml(t.text)}" maxlength="200" />
-            <input class="edit-due" type="date" value="${t.dueDate || ''}" />
-            <div class="edit-actions">
-              <button class="edit-save" data-action="save">저장</button>
-              <button class="edit-cancel" data-action="cancel">취소</button>
-            </div>
-          </div>
-          <div class="item-actions">
-            <button class="icon-btn edit-btn" data-action="edit" title="수정">✏️</button>
-            <button class="icon-btn delete-btn" data-action="delete" title="삭제">🗑</button>
+  function todoHtml(t) {
+    const handle = sortMode === 'manual'
+      ? `<div class="drag-handle" title="드래그하여 순서 변경"><svg width="10" height="18" viewBox="0 0 10 18" fill="currentColor"><circle cx="2.5" cy="3" r="1.5"/><circle cx="7.5" cy="3" r="1.5"/><circle cx="2.5" cy="9" r="1.5"/><circle cx="7.5" cy="9" r="1.5"/><circle cx="2.5" cy="15" r="1.5"/><circle cx="7.5" cy="15" r="1.5"/></svg></div>`
+      : '';
+    const draggable = sortMode === 'manual' ? ' draggable="true"' : '';
+    return `
+      <div class="todo-item ${t.done ? 'done' : ''} ${itemClass(t)}" data-id="${t.id}"${draggable}>
+        ${handle}
+        <input type="checkbox" class="todo-check" ${t.done ? 'checked' : ''} data-action="toggle" />
+        <div class="todo-body">
+          <div class="todo-text">${escapeHtml(t.text)}</div>
+          ${dueBadgeHtml(t.dueDate, t.done)}
+        </div>
+        <div class="edit-form">
+          <input class="edit-input" value="${escapeHtml(t.text)}" maxlength="200" />
+          <input class="edit-due" type="date" value="${t.dueDate || ''}" />
+          <div class="edit-actions">
+            <button class="edit-save" data-action="save">저장</button>
+            <button class="edit-cancel" data-action="cancel">취소</button>
           </div>
         </div>
-      `).join('');
+        <div class="item-actions">
+          <button class="icon-btn edit-btn" data-action="edit" title="수정">✏️</button>
+          <button class="icon-btn delete-btn" data-action="delete" title="삭제">🗑</button>
+        </div>
+      </div>`;
+  }
+
+  function sectionHtml(title, items) {
+    if (!items.length) return '';
+    const header = title ? `<div class="section-header">${title}</div>` : '';
+    return header + items.map(todoHtml).join('');
+  }
+
+  function emptyHtml(icon, title, sub) {
+    return `<div class="empty">
+      <div class="empty-icon">${icon}</div>
+      <div class="empty-title">${title}</div>
+      <div class="empty-sub">${sub}</div>
+    </div>`;
+  }
+
+  function render() {
+    const list = document.getElementById('todoList');
+
+    // 진행률 바
+    const total     = todos.length;
+    const doneCount = todos.filter(t => t.done).length;
+    const wrap = document.getElementById('progressWrap');
+    if (total > 0) {
+      const pct = Math.round(doneCount / total * 100);
+      wrap.style.display = '';
+      document.getElementById('progressText').textContent = `${doneCount} / ${total}개 완료`;
+      document.getElementById('progressPct').textContent  = `${pct}%`;
+      document.getElementById('progressFill').style.width = pct + '%';
+    } else {
+      wrap.style.display = 'none';
     }
 
-    const doneCount = todos.filter(t => t.done).length;
-    summary.textContent = todos.length ? `전체 ${todos.length}개 · 완료 ${doneCount}개` : '';
+    const active = todos.filter(t => !t.done);
+    const done   = todos.filter(t =>  t.done);
+
+    // 툴바 카운트
+    const countEl = document.getElementById('listCount');
+    if (countEl) {
+      const n = filter === 'done' ? done.length : active.length;
+      countEl.textContent = n > 0 ? `${n}개` : '';
+    }
+
+    // 완료 탭
+    if (filter === 'done') {
+      const items = getSortedTodos(done);
+      list.innerHTML = items.length
+        ? items.map(todoHtml).join('')
+        : emptyHtml('✅', '완료된 할일이 없어요', '체크박스를 눌러 완료 처리해보세요');
+      document.getElementById('summary').textContent = '';
+      setupDragDrop();
+      return;
+    }
+
+    // 기본순: 섹션 그룹
+    if (sortMode === 'manual') {
+      const urgent   = active.filter(t => t.dueDate && daysFromToday(t.dueDate) <= 0);
+      const thisWeek = active.filter(t => t.dueDate && daysFromToday(t.dueDate) > 0 && daysFromToday(t.dueDate) <= 7);
+      const later    = active.filter(t => !t.dueDate || daysFromToday(t.dueDate) > 7);
+      const hasUrgent = urgent.length + thisWeek.length > 0;
+      let html = '';
+      html += sectionHtml('오늘 · 마감', urgent);
+      html += sectionHtml('이번 주', thisWeek);
+      html += sectionHtml(hasUrgent ? '나머지' : '', later);
+      if (filter === 'all') html += sectionHtml('완료', done);
+      list.innerHTML = html || emptyHtml('🎉', '할일이 없어요', '위에서 할일을 추가해보세요');
+      document.getElementById('summary').textContent = '';
+      setupDragDrop();
+      return;
+    }
+
+    // 정렬 모드: 평면 리스트
+    const sortedActive = getSortedTodos(active);
+    let html = sortedActive.map(todoHtml).join('');
+    if (filter === 'all' && done.length) {
+      html += `<div class="section-header">완료</div>` + getSortedTodos(done).map(todoHtml).join('');
+    }
+    list.innerHTML = html || emptyHtml('🎉', '할일이 없어요', '위에서 할일을 추가해보세요');
+    document.getElementById('summary').textContent = '';
+    setupDragDrop();
+  }
+
+  function setupDragDrop() {
+    if (sortMode !== 'manual') return;
+    document.querySelectorAll('.todo-item[draggable="true"]').forEach(item => {
+      item.addEventListener('dragstart', e => {
+        if (e.target.closest('input, button, .edit-form')) { e.preventDefault(); return; }
+        dragSrcId = Number(item.dataset.id);
+        setTimeout(() => item.classList.add('dragging'), 0);
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      item.addEventListener('dragend', () => {
+        item.classList.remove('dragging');
+        document.querySelectorAll('.todo-item').forEach(i => i.classList.remove('drag-over'));
+      });
+      item.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        if (item.classList.contains('dragging')) return;
+        document.querySelectorAll('.todo-item').forEach(i => i.classList.remove('drag-over'));
+        item.classList.add('drag-over');
+      });
+      item.addEventListener('dragleave', e => {
+        if (!item.contains(e.relatedTarget)) item.classList.remove('drag-over');
+      });
+      item.addEventListener('drop', e => {
+        e.preventDefault();
+        item.classList.remove('drag-over');
+        const targetId = Number(item.dataset.id);
+        if (dragSrcId === null || dragSrcId === targetId) return;
+        const srcIdx = todos.findIndex(t => t.id === dragSrcId);
+        const dstIdx = todos.findIndex(t => t.id === targetId);
+        if (srcIdx === -1 || dstIdx === -1) return;
+        const [moved] = todos.splice(srcIdx, 1);
+        todos.splice(dstIdx, 0, moved);
+        dragSrcId = null;
+        scheduleSave();
+        render();
+      });
+    });
   }
 
   function escapeHtml(str) {
@@ -676,7 +1049,11 @@
     if (!item) return;
     const id = Number(item.dataset.id);
     const action = e.target.closest('[data-action]')?.dataset.action;
-    if (action === 'toggle') toggleTodo(id);
+    if (action === 'toggle') {
+      const cb = e.target.closest('[data-action="toggle"]');
+      if (cb) { cb.classList.add('popping'); cb.addEventListener('animationend', () => cb.classList.remove('popping'), { once: true }); }
+      toggleTodo(id);
+    }
     if (action === 'delete') deleteTodo(id);
     if (action === 'edit')   startEdit(id);
     if (action === 'save')   commitEdit(id);
@@ -696,6 +1073,15 @@
     filter = e.target.dataset.filter;
     document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
     e.target.classList.add('active');
+    render();
+  });
+
+  document.getElementById('sortOptions').addEventListener('click', e => {
+    const btn = e.target.closest('.sort-btn');
+    if (!btn) return;
+    sortMode = btn.dataset.sort;
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
     render();
   });
 
